@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html class="light" lang="vi" class="scroll-smooth"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Thư Mời Tốt Nghiệp - Nguyễn Thị Lan Anh</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Great+Vibes&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2563eb","primary-light": "#eff6ff",
+                        "primary-dark": "#1e40af",
+                        "secondary": "#93c5fd",
+                        "background-light": "#f0f9ff","background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"],
+                        "script": ["Great Vibes", "cursive"],},
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'sway': 'sway 3s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        sway: {
+                            '0%': { transform: 'rotate(-5deg)' },
+                            '100%': { transform: 'rotate(5deg)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .parallax-bg {
+                background-attachment: fixed;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            }
+            .text-shadow-lg {
+                text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            }
+            .hover-lift {
+                @apply transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg;
+            }
+            .glass-panel {
+                @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-xl;
+            }
+            .polaroid {
+                @apply bg-white p-3 shadow-xl transform transition-all duration-500 hover:z-20 hover:scale-105;
+            }
+        }::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #93c5fd;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }.bg-floral {
+            background-color: #f0f9ff;
+            background-image: radial-gradient(#dbeafe 2px, transparent 2px), radial-gradient(#dbeafe 2px, transparent 2px);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+        }
+    </style>
+</head>
+<body class="bg-floral dark:bg-background-dark text-slate-800 font-display antialiased selection:bg-primary/30 selection:text-primary-dark overflow-x-hidden">
+<div class="fixed bottom-4 right-4 z-[100] group">
+  <audio id="bgMusic" loop>
+    <source src="../昨夜风今宵月.mp3" type="audio/mpeg"/>
+  </audio>
+
+  <button 
+    id="musicBtn"
+    onclick="toggleMusic()"
+    class="flex h-12 w-12 items-center justify-center rounded-full 
+           bg-white/80 backdrop-blur shadow-lg border border-primary/20 
+           text-primary transition-all hover:scale-110 hover:bg-primary hover:text-white">
+    <span class="material-symbols-outlined" id="musicIcon">music_note</span>
+  </button>
+
+  <span 
+    id="musicTooltip"
+    class="absolute right-14 top-1/2 -translate-y-1/2 whitespace-nowrap 
+           rounded-lg bg-white/90 px-3 py-1 text-xs font-medium text-gray-600 
+           opacity-0 shadow-sm transition-opacity group-hover:opacity-100">
+    Nhạc nền
+  </span>
+</div>
+<script>
+    const bgMusic = document.getElementById('bgMusic');
+    const musicIcon = document.getElementById('musicIcon');
+    const tooltip = document.getElementById('musicTooltip');
+
+    let isPlaying = false;
+    let fadeInterval = null;
+
+    bgMusic.volume = 0;
+    function fadeInMusic(duration = 2500) {
+    clearInterval(fadeInterval);
+    bgMusic.play();
+    let step = 0.02;
+    fadeInterval = setInterval(() => {
+        if (bgMusic.volume < 0.35) {
+        bgMusic.volume = Math.min(bgMusic.volume + step, 0.35);
+        } else {
+        clearInterval(fadeInterval);
+        }
+    }, duration / (0.35 / step));
+    }
+    function fadeOutMusic(duration = 1500) {
+    clearInterval(fadeInterval);
+    let step = 0.02;
+    fadeInterval = setInterval(() => {
+        if (bgMusic.volume > 0) {
+        bgMusic.volume = Math.max(bgMusic.volume - step, 0);
+        } else {
+        bgMusic.pause();
+        clearInterval(fadeInterval);
+        }
+    }, duration / (0.35 / step));
+    }
+
+    window.addEventListener('load', () => {
+    bgMusic.muted = true;
+    bgMusic.play().then(() => {
+        bgMusic.muted = false;
+        fadeInMusic();
+        isPlaying = true;
+        musicIcon.textContent = 'pause';
+        tooltip.textContent = 'Tắt nhạc';
+    }).catch(() => {
+        document.addEventListener('click', enableMusicOnce, { once: true });
+    });
+    });
+
+    function enableMusicOnce() {
+    bgMusic.muted = false;
+    fadeInMusic();
+    isPlaying = true;
+    musicIcon.textContent = 'pause';
+    tooltip.textContent = 'Tắt nhạc';
+    }
+
+    function toggleMusic() {
+    if (isPlaying) {
+        fadeOutMusic();
+        musicIcon.textContent = 'music_note';
+        tooltip.textContent = 'Bật nhạc';
+    } else {
+        fadeInMusic();
+        musicIcon.textContent = 'pause';
+        tooltip.textContent = 'Tắt nhạc';
+    }
+    isPlaying = !isPlaying;
+    }
+    const gradVideo = document.getElementById('gradVideo');
+
+    if (gradVideo) {
+    gradVideo.addEventListener('pause', () => {
+        if (isPlaying) toggleMusic();
+    });
+
+    gradVideo.addEventListener('play', () => {
+        if (!isPlaying) toggleMusic();
+    });
+    }
+</script>
+<script>
+    function toggleMusic() {
+        const music = document.getElementById('bgMusic');
+        const icon = document.getElementById('musicIcon');
+        if (music.paused) {
+            music.play();
+            icon.innerText = 'pause';
+            icon.parentElement.classList.add('animate-spin-slow');
+        } else {
+            music.pause();
+            icon.innerText = 'music_note';
+            icon.parentElement.classList.remove('animate-spin-slow');
+        }
+    }
+</script>
+<nav class="sticky top-0 z-50 w-full border-b border-blue-100 bg-white/80 backdrop-blur-md dark:bg-background-dark/80 dark:border-gray-800 transition-all duration-300">
+<div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform group-hover:rotate-12 group-hover:bg-primary group-hover:text-white">
+<span class="material-symbols-outlined text-[24px]">school</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-primary font-serif dark:text-white">Bich Ngoc's Graduation</h1>
+</div>
+<div class="hidden md:flex md:items-center md:gap-8">
+<a class="relative text-sm font-semibold uppercase tracking-wide text-gray-600 hover:text-primary transition-colors dark:text-gray-200 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:transition-all hover:after:w-full" href="#hero">Trang chủ</a>
+<a class="relative text-sm font-semibold uppercase tracking-wide text-gray-600 hover:text-primary transition-colors dark:text-gray-200 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:transition-all hover:after:w-full" href="#info">Thông tin</a>
+<a class="relative text-sm font-semibold uppercase tracking-wide text-gray-600 hover:text-primary transition-colors dark:text-gray-200 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:transition-all hover:after:w-full" href="#timeline">Lịch trình</a>
+<a class="relative text-sm font-semibold uppercase tracking-wide text-gray-600 hover:text-primary transition-colors dark:text-gray-200 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:transition-all hover:after:w-full" href="#moments">Khoảnh khắc</a>
+</div>
+<a class="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-primary to-blue-400 px-6 py-2.5 text-sm font-bold text-white transition-all hover:shadow-lg hover:shadow-blue-300 hover:-translate-y-0.5 active:scale-95" href="#rsvp">
+                Gửi lời chúc
+            </a>
+<button id="mobileMenuBtn" class="md:hidden p-2 text-gray-600 dark:text-gray-300">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+<!-- Mobile Menu -->
+<div id="mobileMenu"
+  class="md:hidden fixed top-20 left-0 w-full bg-white/90 backdrop-blur-xl border-b border-blue-100
+         shadow-xl transform -translate-y-full opacity-0 transition-all duration-500 z-40">
+
+  <div class="flex flex-col px-6 py-6 space-y-5 text-center">
+    <a href="#hero" class="text-lg font-semibold text-gray-700 hover:text-primary transition">Trang chủ</a>
+    <a href="#info" class="text-lg font-semibold text-gray-700 hover:text-primary transition">Thông tin</a>
+    <a href="#timeline" class="text-lg font-semibold text-gray-700 hover:text-primary transition">Lịch trình</a>
+    <a href="#moments" class="text-lg font-semibold text-gray-700 hover:text-primary transition">Khoảnh khắc</a>
+  </div>
+</div>
+<script>
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+        if (mobileMenu.classList.contains('-translate-y-full')) {
+            mobileMenu.classList.remove('-translate-y-full', 'opacity-0');
+            mobileMenu.classList.add('translate-y-0', 'opacity-100');
+        } else {
+            mobileMenu.classList.add('-translate-y-full', 'opacity-0');
+            mobileMenu.classList.remove('translate-y-0', 'opacity-100');
+        }
+    });
+</script>
+<section class="relative overflow-hidden pt-10 pb-20 lg:pt-16 lg:pb-32" id="hero">
+<div class="absolute top-0 right-0 -z-10 h-[600px] w-[600px] translate-x-1/3 -translate-y-1/4 rounded-full bg-blue-200/40 blur-[100px] animate-pulse-slow"></div>
+<div class="absolute bottom-0 left-0 -z-10 h-[500px] w-[500px] -translate-x-1/3 translate-y-1/4 rounded-full bg-blue-300/30 blur-[100px] animate-pulse-slow"></div>
+<div class="absolute top-20 left-10 text-blue-200 animate-float opacity-60">
+<span class="material-symbols-outlined text-5xl">favorite</span>
+</div>
+<div class="absolute bottom-40 right-10 text-blue-300 animate-float-delayed opacity-60">
+<span class="material-symbols-outlined text-6xl">local_florist</span>
+</div>
+<div class="absolute top-40 right-20 text-blue-100 animate-float opacity-80">
+<span class="material-symbols-outlined text-4xl">favorite_border</span>
+</div>
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col items-center">
+<div class="relative w-full max-w-4xl h-[500px] md:h-[600px] mb-12 flex justify-center items-center">
+<div class="absolute left-0 md:left-10 top-10 w-48 h-64 md:w-60 md:h-72 polaroid -rotate-6 z-10 hidden sm:block">
+<div class="w-full h-full overflow-hidden">
+<img alt="Graduate looking happy with flowers" class="w-full h-full object-cover" src="/z7391967326453_f577e3e1fb2a5178e596f77d047c09fc.jpg"/>
+</div>
+<div class="absolute -bottom-10 -left-6 text-blue-400 animate-sway">
+<span class="material-symbols-outlined text-4xl">volunteer_activism</span>
+</div>
+</div>
+<div class="relative w-72 h-96 md:w-80 md:h-[450px] polaroid rotate-2 z-20 mx-auto">
+<div class="w-full h-full overflow-hidden relative">
+<img alt="Portrait of a female graduate smiling happily in graduation gown holding a diploma" class="w-full h-full object-cover" src="/z7391967326453_f577e3e1fb2a5178e596f77d047c09fc.jpg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<p class="font-serif text-sm italic opacity-90">Kinh doanh Quốc tế</p>
+</div>
+</div>
+<div class="absolute -bottom-4 -right-4 bg-white rounded-full p-2 shadow-lg text-primary animate-bounce">
+<span class="material-symbols-outlined filled">favorite</span>
+</div>
+</div>
+<div class="absolute right-0 md:right-10 top-20 w-48 h-64 md:w-60 md:h-72 polaroid rotate-6 z-10 hidden sm:block">
+<div class="w-full h-full overflow-hidden">
+<img alt="Friends graduation moment" class="w-full h-full object-cover" src="/z7391967326453_f577e3e1fb2a5178e596f77d047c09fc.jpg"/>
+</div>
+<div class="absolute -top-8 -right-4 text-blue-300 animate-float">
+<span class="material-symbols-outlined text-5xl">water_drop</span>
+</div>
+</div>
+</div>
+<div class="text-center w-full max-w-4xl relative z-30 -mt-10 md:-mt-20 glass-panel rounded-3xl p-8 md:p-12">
+<p class="text-base md:text-lg font-bold text-gray-500 uppercase tracking-[0.2em] mb-4">Thân mời tham dự lễ tốt nghiệp của:</p>
+<h1 class="text-6xl md:text-7xl font-script text-primary mb-8 leading-tight drop-shadow-sm hover:scale-105 transition-transform duration-500 cursor-default">
+                    Nguyễn Thị Bích Ngọc
+                </h1>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t border-blue-100 pt-8">
+<div class="flex flex-col items-center md:items-end md:pr-8 border-b md:border-b-0 md:border-r border-blue-100 pb-8 md:pb-0">
+<div class="flex items-baseline text-primary-dark">
+<span class="text-7xl md:text-8xl font-serif font-bold tracking-tighter">16</span>
+<div class="flex flex-col items-start ml-2">
+<span class="text-2xl md:text-3xl font-bold uppercase">Tháng 01</span>
+<span class="text-xl md:text-2xl font-serif">2025</span>
+</div>
+</div>
+<p class="text-gray-500 mt-2 font-medium">09:00 AM - 12:00 PM</p>
+</div>
+<div class="flex flex-col items-center md:items-start md:pl-8 text-center md:text-left">
+<h3 class="text-2xl font-bold text-gray-800 uppercase mb-2">Hội trường E3</h3>
+<p class="text-lg text-primary font-medium mb-1">Trường Đại học Công nghệ Thành phố Hồ Chí Minh</p>
+<p class="text-gray-500 mb-4">Lô E2b-4, Đường D1, Khu Công nghệ cao, Phường Tăng Nhơn Phú, TP.HCM</p>
+<p class="text-sm font-bold text-gray-400">Liên hệ: 0389.388.680</p>
+</div>
+</div>
+<div class="mt-10 flex justify-center gap-4">
+<a class="group relative px-8 py-3 bg-primary text-white font-bold rounded-full overflow-hidden shadow-lg hover:shadow-blue-400/50 transition-all hover:-translate-y-1" href="#rsvp">
+<span class="relative z-10 flex items-center gap-2">
+                            Xác nhận tham dự <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</span>
+<div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</a>
+</div>
+</div>
+<div class="mt-8 text-center max-w-2xl mx-auto">
+<p class="italic text-gray-500 font-serif">
+                    "Thương mời các thầy cô, anh chị, các bạn và các em đến chung vui và lưu giữ kỷ niệm ngày tốt nghiệp cùng Bích Ngọc"
+                </p>
+</div>
+</div>
+</div>
+</section>
+<section class="relative py-20 parallax-bg" id="info" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDXMjCi6WVAq9Zx4shfz3ziQGRdVTo_4MJzNkWWQYOZ0b8SS6YNBkGgOWEtarUAOOsYU1yRN6nDdAv3eWEN76AOh57ljQSwOSsU9WnhDDGKIsjJ-XnPrUJH0IaDYqIMjSjCdeNbx0uWHdYv8M8765VGTn0UkEmm9f8JDXDvZ3hs_pV_G8IcZWAZ3WHoHeV_s240bmgzNX8FT4hjNO7W9y3c-9pLKWGwHxQCBy4CojzhJCdrFMoZICayQyD_yeuOeSiYTyBBKc9xWFU');">
+<div class="absolute inset-0 bg-white/95 dark:bg-[#1a121e]/95 backdrop-blur-[2px]"></div>
+<div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 z-10">
+<div class="text-center mb-12">
+<span class="material-symbols-outlined text-4xl text-primary mb-2">stars</span>
+<h2 class="text-4xl font-serif font-bold text-gray-800 dark:text-white mb-4">Thông Tin Chi Tiết</h2>
+<div class="h-1 w-20 bg-primary mx-auto rounded-full"></div>
+</div>
+<div class="grid gap-8 lg:grid-cols-3">
+<div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur p-8 rounded-2xl shadow-lg border border-blue-50 hover:shadow-xl hover:shadow-blue-100 hover:-translate-y-2 transition-all duration-300">
+<div class="h-14 w-14 rounded-full bg-blue-100 flex items-center justify-center text-primary mb-6 mx-auto">
+<span class="material-symbols-outlined text-3xl">calendar_clock</span>
+</div>
+<h3 class="text-xl font-bold text-center mb-2">Thời Gian</h3>
+<p class="text-center text-gray-600 dark:text-gray-300">
+                    09:00 Sáng, Thứ Sáu<br/>
+                    16 tháng 01 năm 2025
+                </p>
+</div>
+<div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur p-8 rounded-2xl shadow-lg border border-blue-50 hover:shadow-xl hover:shadow-blue-100 hover:-translate-y-2 transition-all duration-300">
+<div class="h-14 w-14 rounded-full bg-blue-100 flex items-center justify-center text-primary mb-6 mx-auto">
+<span class="material-symbols-outlined text-3xl">location_on</span>
+</div>
+<h3 class="text-xl font-bold text-center mb-2">Địa Điểm</h3>
+<p class="text-center text-gray-600 dark:text-gray-300">
+                    Hội trường E3<br/>
+                    ĐH Công nghệ Thành phố Hồ Chí Minh
+                </p>
+<div class="mt-4 text-center">
+<a class="text-sm font-bold text-primary hover:underline flex items-center justify-center gap-1" href="https://maps.app.goo.gl/cmubbkUDc6nxDS1c6" target="_blank">
+                        Xem bản đồ <span class="material-symbols-outlined text-xs">open_in_new</span>
+</a>
+</div>
+</div>
+<div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur p-8 rounded-2xl shadow-lg border border-blue-50 hover:shadow-xl hover:shadow-blue-100 hover:-translate-y-2 transition-all duration-300">
+<div class="h-14 w-14 rounded-full bg-blue-100 flex items-center justify-center text-primary mb-6 mx-auto">
+<span class="material-symbols-outlined text-3xl">styler</span>
+</div>
+<h3 class="text-xl font-bold text-center mb-2">Dress Code</h3>
+<p class="text-center text-gray-600 dark:text-gray-300">
+                    Các cậu thích mặc gì mặc nhá<br/>
+<span class="text-sm text-gray-500 italic">(Để lên hình đẹp nhất nha)</span>
+</p>
+</div>
+</div>
+<div class="mt-12 relative h-80 rounded-2xl overflow-hidden shadow-lg border-4 border-white">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105" >
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31347.348167415417!2d106.74749797431645!3d10.8557382!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175276e7ea103df%3A0xb6cf10bb7d719327!2zSFVURUNIIC0gxJDhuqFpIGjhu41jIEPDtG5nIG5naOG7hyBUUC5IQ00gKFRodSBEdWMgQ2FtcHVzKQ!5e0!3m2!1svi!2s!4v1767372836586!5m2!1svi!2s" width="1240px" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none">
+    
+</div>
+<div class="absolute bottom-6 left-6 text-white">
+<p class="font-bold text-lg flex items-center gap-2">
+<span class="material-symbols-outlined">map</span> Check-in Location
+                </p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-20 bg-white relative overflow-hidden" id="timeline">
+<div class="absolute top-1/2 left-0 -z-10 h-96 w-96 -translate-y-1/2 rounded-full bg-blue-100/50 blur-3xl animate-float"></div>
+<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-16">
+<h2 class="text-4xl font-serif font-bold text-primary-dark">Lịch trình sự kiện</h2>
+<div class="flex justify-center mt-4">
+<span class="material-symbols-outlined text-blue-300">horizontal_rule</span>
+<span class="material-symbols-outlined text-blue-300 mx-2">schedule</span>
+<span class="material-symbols-outlined text-blue-300">horizontal_rule</span>
+</div>
+</div>
+<div class="relative pl-8 sm:pl-0">
+<div class="absolute left-8 top-0 bottom-0 w-px bg-blue-200 sm:left-1/2 sm:-ml-px"></div>
+<div class="group relative mb-12 sm:mb-16">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+<div class="absolute left-0 top-0 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full bg-white border-4 border-blue-100 sm:left-1/2 z-10 group-hover:scale-110 transition-transform">
+<div class="h-3 w-3 rounded-full bg-primary"></div>
+</div>
+<div class="pl-12 sm:w-1/2 sm:pl-0 sm:pr-16 sm:text-right group-hover:-translate-x-2 transition-transform duration-300">
+<div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 inline-block text-left sm:text-right w-full hover:bg-white hover:shadow-md transition-all">
+<h3 class="text-lg font-bold text-gray-800">Đón tiếp khách mời</h3>
+<p class="text-sm text-gray-500">Check-in và ổn định chỗ ngồi</p>
+</div>
+</div>
+<div class="pl-12 pt-2 sm:w-1/2 sm:pl-16 sm:pt-0 group-hover:translate-x-2 transition-transform duration-300">
+<span class="inline-block rounded-full bg-primary px-4 py-1 text-sm font-bold text-white shadow-md shadow-blue-200">07:30 - 09:00</span>
+</div>
+</div>
+</div>
+<div class="group relative mb-12 sm:mb-16">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+<div class="absolute left-0 top-0 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full bg-primary border-4 border-blue-200 sm:left-1/2 z-10 group-hover:scale-110 transition-transform shadow-lg shadow-primary/30">
+<span class="material-symbols-outlined text-white text-sm">school</span>
+</div>
+<div class="order-1 pl-12 sm:order-2 sm:w-1/2 sm:pl-16 group-hover:translate-x-2 transition-transform duration-300">
+<div class="bg-white p-4 rounded-xl border border-blue-200 shadow-md inline-block w-full">
+<h3 class="text-xl font-bold text-primary">Lễ trao bằng chính thức</h3>
+<p class="text-sm text-gray-500">Nghi thức quan trọng nhất</p>
+</div>
+</div>
+<div class="order-2 pl-12 pt-2 sm:order-1 sm:w-1/2 sm:pl-0 sm:pr-16 sm:text-right sm:pt-0 group-hover:-translate-x-2 transition-transform duration-300">
+<span class="inline-block rounded-full bg-primary px-4 py-1 text-sm font-bold text-white shadow-md shadow-blue-200">09:00 - 11:00</span>
+</div>
+</div>
+</div>
+<div class="group relative">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+<div class="absolute left-0 top-0 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full bg-white border-4 border-blue-100 sm:left-1/2 z-10 group-hover:scale-110 transition-transform">
+<div class="h-3 w-3 rounded-full bg-primary"></div>
+</div>
+<div class="pl-12 sm:w-1/2 sm:pl-0 sm:pr-16 sm:text-right group-hover:-translate-x-2 transition-transform duration-300">
+<div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 inline-block text-left sm:text-right w-full hover:bg-white hover:shadow-md transition-all">
+<h3 class="text-lg font-bold text-gray-800">Tiệc trà &amp; Chụp ảnh</h3>
+<p class="text-sm text-gray-500">Lưu giữ kỷ niệm cùng mọi người</p>
+</div>
+</div>
+<div class="pl-12 pt-2 sm:w-1/2 sm:pl-16 sm:pt-0 group-hover:translate-x-2 transition-transform duration-300">
+<span class="inline-block rounded-full bg-primary px-4 py-1 text-sm font-bold text-white shadow-md shadow-blue-200">11:00 - 12:00</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-20 bg-blue-50 relative overflow-hidden" id="moments">
+<div class="absolute top-0 right-0 w-64 h-64 bg-white/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+<div class="mx-auto max-w-4xl text-center mb-12">
+<h2 class="text-4xl font-script font-bold mb-4 text-primary text-shadow">Khoảnh Khắc Đáng Nhớ</h2>
+<p class="text-gray-600 max-w-2xl mx-auto">4 năm thanh xuân rực rỡ gói gọn trong những khung hình.</p>
+</div>
+<div class="relative w-full aspect-video rounded-3xl overflow-hidden shadow-2xl bg-black group cursor-pointer mb-10 transform transition-all duration-500 hover:scale-[1.01] border-4 border-white">
+
+  <!-- Overlay gradient -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 z-10"></div>
+
+  <!-- Video -->
+  <video 
+    id="gradVideo"
+    class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+    autoplay
+    muted
+    loop
+    playsinline>
+    <source src="/7391956756505.mp4" type="video/mp4">
+  </video>
+
+  <!-- Play / Pause Button -->
+  <div onclick="toggleVideo()" class="absolute inset-0 flex items-center justify-center z-20">
+    <div class="h-20 w-20 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110 border border-white/50">
+      <span id="videoIcon" class="material-symbols-outlined text-5xl text-white drop-shadow-lg">
+        pause
+      </span>
+    </div>
+  </div>
+
+  <!-- Caption -->
+  <div class="absolute bottom-6 left-6 text-white z-20">
+    <p class="text-xl font-bold font-serif">Kỷ niệm</p>
+    <p class="text-sm italic opacity-80">Khoảnh khắc không lặp lại</p>
+  </div>
+</div>
+
+<script>
+function toggleVideo() {
+  const video = document.getElementById('gradVideo');
+  const icon = document.getElementById('videoIcon');
+
+  if (video.paused) {
+    video.play();
+    icon.textContent = 'pause';
+  } else {
+    video.pause();
+    icon.textContent = 'play_arrow';
+  }
+}
+</script>
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+</div>
+</div>
+</section>
+<section class="py-20 lg:py-32" id="rsvp">
+<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+<div class="group rounded-[2.5rem] bg-gradient-to-br from-blue-500 to-blue-700 px-6 py-12 shadow-2xl shadow-blue-400/40 md:px-12 md:py-16 relative overflow-hidden transition-transform hover:-translate-y-2 duration-500">
+<div class="absolute top-0 right-0 -mt-10 -mr-10 h-64 w-64 rounded-full bg-white opacity-10 blur-3xl animate-pulse-slow"></div>
+<div class="absolute bottom-0 left-0 -mb-10 -ml-10 h-64 w-64 rounded-full bg-white opacity-10 blur-3xl animate-pulse-slow"></div>
+<div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
+<div class="lg:w-1/2 text-center lg:text-left">
+<h2 class="text-4xl font-serif font-black tracking-tight text-white mb-4">Xác nhận tham dự</h2>
+<p class="text-lg text-blue-100 font-light mb-8">
+                        Sự hiện diện của bạn là niềm vinh hạnh lớn đối với mình. Vui lòng xác nhận trước ngày <span class="font-bold text-white">16/01/2025</span> nhé!
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+<button class="inline-flex items-center justify-center rounded-full bg-white px-8 py-3 text-base font-bold text-blue-700 shadow-lg hover:bg-blue-50 hover:scale-105 transition-all duration-300">
+                            <a href="tel:0389388680">Gọi cho tớ nha</a>
+                        </button>
+<button class="inline-flex items-center justify-center rounded-full border border-white/40 bg-white/10 backdrop-blur-sm px-6 py-3 text-base font-bold text-white hover:bg-white/20 transition-all duration-300">
+<span class="material-symbols-outlined mr-2">share</span> <a href="https://zalo.me/0389388680">Zalo tớ</a>
+                        </button>
+</div>
+</div>
+<div class="lg:w-1/3">
+<div class="bg-white p-4 rounded-2xl shadow-xl transform rotate-3 transition-transform group-hover:rotate-0 duration-500">
+<div class="aspect-square overflow-hidden rounded-xl bg-gray-50 flex items-center justify-center relative group/qr border-2 border-dashed border-blue-200">
+<div class="absolute inset-0 bg-primary/5 z-10 opacity-0 group-hover/qr:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[1px]">
+<span class="material-symbols-outlined text-primary text-5xl animate-bounce">qr_code_scanner</span>
+</div>
+<img alt="QR Code for RSVP" class="h-full w-full object-contain mix-blend-multiply opacity-90 scale-150" src="../tải xuống.jpg"/>
+</div>
+<div class="mt-4 text-center">
+<p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Scan Me</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<canvas id="gradConfetti" class="fixed inset-0 pointer-events-none z-[60]"></canvas>
+<script>
+const canvas = document.getElementById('gradConfetti');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const COLORS = [
+  'rgba(255,215,0,0.7)',   // gold
+  'rgba(255,255,255,0.7)',// white
+  'rgba(230,230,230,0.6)' // silver
+];
+
+const particles = [];
+const COUNT = 35; // càng nhỏ càng sang
+
+function createParticle() {
+  return {
+    x: Math.random() * canvas.width,
+    y: -30,
+    size: Math.random() * 6 + 4,
+    speed: Math.random() * 0.8 + 0.4, // rơi chậm
+    drift: Math.random() * 0.6 - 0.3,
+    rotate: Math.random() * Math.PI,
+    rotateSpeed: Math.random() * 0.02 - 0.01,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    type: Math.random() > 0.7 ? 'cap' : 'paper'
+  };
+}
+
+for (let i = 0; i < COUNT; i++) particles.push(createParticle());
+
+function drawCap(p) {
+  ctx.fillRect(-6, -2, 12, 4); // mũ
+  ctx.fillRect(-2, 2, 4, 6);  // tua
+}
+
+function drawPaper(p) {
+  ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size/2);
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  particles.forEach(p => {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotate);
+    ctx.fillStyle = p.color;
+
+    p.type === 'cap' ? drawCap(p) : drawPaper(p);
+
+    ctx.restore();
+
+    p.y += p.speed;
+    p.x += p.drift;
+    p.rotate += p.rotateSpeed;
+
+    if (p.y > canvas.height + 40) {
+      Object.assign(p, createParticle());
+      p.y = -30;
+    }
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+<footer class="border-t border-blue-100 bg-white py-12">
+<div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+<div class="flex justify-center mb-6">
+<div class="h-12 w-12 rounded-full bg-blue-50 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl animate-pulse-slow">favorite</span>
+</div>
+</div>
+<p class="mb-8 text-xl font-script text-gray-600">
+                "Cảm ơn vì đã là một phần thanh xuân rực rỡ của mình."
+            </p>
+<div class="flex justify-center gap-6 mb-8">
+<a class="text-gray-400 hover:text-primary transition-all hover:-translate-y-1 hover:scale-110" href="https://www.facebook.com/Urlngoccute">
+<span class="sr-only">Facebook</span>
+<svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" fill-rule="evenodd"></path></svg>
+</a>
+<a class="text-gray-400 hover:text-primary transition-all hover:-translate-y-1 hover:scale-110" href="https://www.instagram.com/bnoc0426/">
+<span class="sr-only">Instagram</span>
+<svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772 4.902 4.902 0 011.772-1.153c.636-.247 1.363-.416 2.427-.465 1.067-.047 1.407-.06 3.808-.06h.63zm.084-.022c-2.615 0-2.945.011-3.987.059-1.037.047-1.602.213-1.98.36a3.516 3.516 0 00-1.285.835 3.516 3.516 0 00-.835 1.285c-.147.378-.313.943-.36 1.98-.048 1.042-.059 1.372-.059 3.987s.011 2.945.059 3.987c.047 1.037.213 1.602.36 1.98.178.473.415.86.835 1.285.425.42.812.657 1.285.835.378.147.943.313 1.98.36 1.042.048 1.372.059 3.987.059s2.945-.011 3.987-.059c1.037-.047 1.602-.213 1.98-.36a3.516 3.516 0 001.285-.835 3.516 3.516 0 00.835-1.285c.147-.378.313-.943.36-1.98.048-1.042.059-1.372.059-3.987s-.011-2.945-.059-3.987c-.047-1.037-.213-1.602-.36-1.98a3.516 3.516 0 00-.835-1.285 3.516 3.516 0 00-1.285-.835c-.378-.147-.943-.313-1.98-.36-1.042-.048-1.372-.059-3.987-.059zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" fill-rule="evenodd"></path></svg>
+</a>
+</div>
+<p class="text-sm text-gray-400">
+                © 2025 Bích Ngọc Graduation. Designed by <a href="https://zalo.me/0359674282">Việt Hà</a>.
+            </p>
+</div>
+</footer>
+</body></html>

@@ -5,8 +5,9 @@
 <title>Thư Mời Tốt Nghiệp - Nguyễn Thị Bích Ngọc</title>
 <meta property="og:description" content="Khoảnh khắc trưởng thành cùng tới trong lễ tốt nghiệp ĐH Công nghệ TP.HCM - HUTECH. Thân mời các bạn đến chung vui và lưu giữ kỷ niệm ngày đặc biệt này nhé!"/>
 <meta property="og:image" content="https://vietha04.github.io/Bich-Ngoc_graduation/img/img-faced.png">
+<meta property="og:image:type" content="image/png">
 <meta property="og:type" content="website">
-<meta property="og:url" content="index.html" />
+<meta property="og:url" content="https://vietha04.github.io/Bich-Ngoc_graduation/" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
@@ -185,26 +186,102 @@
     color: #6b7280;
   }
 
-  /* Responsive Countdown Timer */
   #countdown-timer {
     flex-wrap: wrap;
     gap: 10px;
   }
 
   #countdown-timer div {
-    flex: 1 1 calc(50% - 10px); /* Two columns on smaller screens */
+    flex: 1 1 calc(50% - 10px);
     max-width: 150px;
   }
 
   @media (min-width: 768px) {
     #countdown-timer div {
-      flex: 1 1 calc(25% - 10px); /* Four columns on larger screens */
+      flex: 1 1 calc(25% - 10px);
     }
   }
-    </style>
+    #introOverlay {
+      animation: fadeInZoom 0.8s ease-out;
+    }
+
+    #introOverlay.opacity-0 {
+      animation: fadeOutZoom 0.7s ease-in;
+    }
+
+    @keyframes fadeInZoom {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeOutZoom {
+      from {
+        opacity: 1;
+        transform: scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+    }
+  </style>
+<style>
+  /* Smooth Scroll Behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
 </head>
 <body class="bg-floral dark:bg-background-dark text-slate-800 font-display antialiased selection:bg-primary/30 selection:text-primary-dark overflow-x-hidden">
-<div class="fixed bottom-4 right-4 z-[100] group">
+  <div id="introOverlay" class="fixed inset-0 z-[999] flex items-center justify-center bg-white/90 backdrop-blur-xl transition-opacity duration-700">
+    <div class="text-center px-6">
+      <p class="font-serif text-lg text-gray-500 mb-2 tracking-widest uppercase">
+        Graduation Invitation
+      </p>
+
+      <h1 class="font-script text-3xl md:text-5xl text-primary mb-8">
+        Nguyễn Thị Bích Ngọc
+      </h1>
+
+      <button
+        id="openInviteBtn"
+        class="px-10 py-4 rounded-full bg-primary text-white text-lg font-bold shadow-xl
+              hover:scale-105 hover:shadow-blue-400 transition-all">
+        🎓 Nhận thiệp
+      </button>
+
+      <p class="mt-6 text-sm text-gray-400 italic">
+        Chạm để bật nhạc & mở lời mời
+      </p>
+    </div>
+  </div>
+  <script>
+  const intro = document.getElementById('introOverlay');
+  const openBtn = document.getElementById('openInviteBtn');
+
+  openBtn.addEventListener('click', () => {
+    fadeInMusic();
+    isPlaying = true;
+    updateUI(true);
+
+    for (let i = 0; i < 15; i++) {
+      particles.push(createParticle());
+    }
+
+    intro.classList.add('opacity-0');
+    setTimeout(() => {
+      intro.style.display = 'none';
+    }, 700);
+  });
+  </script>
+
+  <div class="fixed bottom-4 right-4 z-[100] group">
   <audio id="bgMusic" loop>
     <source src="./img/昨夜风今宵月.mp3" type="audio/mpeg"/>
   </audio>
@@ -227,45 +304,77 @@
   </span>
 </div>
 <script>
-  // Restore autoplay functionality for background music
+document.addEventListener('DOMContentLoaded', () => {
   const bgMusic = document.getElementById('bgMusic');
   const musicIcon = document.getElementById('musicIcon');
   const tooltip = document.getElementById('musicTooltip');
+  const gradVideo = document.getElementById('gradVideo');
 
   let isPlaying = false;
+  let fadeInterval = null;
+  const MAX_VOLUME = 0.35;
 
-  window.addEventListener('load', () => {
-    bgMusic.muted = true;
-    bgMusic.play().then(() => {
-      bgMusic.muted = false;
-      isPlaying = true;
-      musicIcon.textContent = 'pause';
-      tooltip.textContent = 'Tắt nhạc';
-    }).catch(() => {
-      document.addEventListener('click', enableMusicOnce, { once: true });
-    });
-  });
+  bgMusic.volume = 0;
 
-  function enableMusicOnce() {
-    bgMusic.muted = false;
+  function fadeInMusic(duration = 2000) {
+    clearInterval(fadeInterval);
     bgMusic.play();
-    isPlaying = true;
-    musicIcon.textContent = 'pause';
-    tooltip.textContent = 'Tắt nhạc';
+    let step = 0.02;
+    fadeInterval = setInterval(() => {
+      if (bgMusic.volume < MAX_VOLUME) {
+        bgMusic.volume = Math.min(bgMusic.volume + step, MAX_VOLUME);
+      } else {
+        clearInterval(fadeInterval);
+      }
+    }, duration / (MAX_VOLUME / step));
   }
 
-  function toggleMusic() {
+  function fadeOutMusic(duration = 1200) {
+    clearInterval(fadeInterval);
+    let step = 0.02;
+    fadeInterval = setInterval(() => {
+      if (bgMusic.volume > 0) {
+        bgMusic.volume = Math.max(bgMusic.volume - step, 0);
+      } else {
+        bgMusic.pause();
+        clearInterval(fadeInterval);
+      }
+    }, duration / (MAX_VOLUME / step));
+  }
+
+  function updateUI() {
     if (isPlaying) {
-      bgMusic.pause();
+      musicIcon.textContent = 'pause';
+      tooltip.textContent = 'Tắt nhạc';
+      musicIcon.parentElement.classList.add('animate-spin-slow');
+    } else {
       musicIcon.textContent = 'music_note';
       tooltip.textContent = 'Bật nhạc';
+      musicIcon.parentElement.classList.remove('animate-spin-slow');
+    }
+  }
+
+  window.toggleMusic = function () {
+    if (!isPlaying) {
+      fadeInMusic();
     } else {
-      bgMusic.play();
-      musicIcon.textContent = 'pause';
-      tooltip.textContent = 'Tắt nhạc';
+      fadeOutMusic();
     }
     isPlaying = !isPlaying;
+    updateUI();
+  };
+
+  // Sync với video
+  if (gradVideo) {
+    gradVideo.addEventListener('play', () => {
+      if (isPlaying) toggleMusic();
+    });
+
+    gradVideo.addEventListener('pause', () => {
+      if (!isPlaying) toggleMusic();
+    });
   }
+});
 </script>
 <nav class="sticky top-0 z-50 w-full border-b border-blue-100 bg-white/80 backdrop-blur-md dark:bg-background-dark/80 dark:border-gray-800 transition-all duration-300">
 <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -796,4 +905,33 @@ animateParticles();
             </p>
 </div>
 </footer>
+<script>
+function fadeInMusic() {
+  const bgMusic = document.getElementById('bgMusic');
+  bgMusic.volume = 0.35; 
+  bgMusic.play();
+}
+
+function updateUI(isPlaying) {
+  const musicIcon = document.getElementById('musicIcon');
+  const tooltip = document.getElementById('musicTooltip');
+
+  if (isPlaying) {
+    musicIcon.textContent = 'pause';
+    tooltip.textContent = 'Tắt nhạc';
+  } else {
+    musicIcon.textContent = 'music_note';
+    tooltip.textContent = 'Bật nhạc';
+  }
+}
+
+function createParticle() {
+  return {
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    size: Math.random() * 8 + 4,
+    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+  };
+}
+</script>
 </body></html>

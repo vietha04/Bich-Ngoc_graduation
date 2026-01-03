@@ -99,6 +99,100 @@
             background-size: 32px 32px;
             background-position: 0 0, 16px 16px;
         }
+        /* Countdown Timer Animations */
+        #countdown-timer div {
+          animation: fadeIn 1s ease-in-out, pulse 1.5s infinite;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        @keyframes pulse {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+        }
+
+        /* Highlight numbers */
+        #countdown-timer span {
+          display: inline-block;
+          background: linear-gradient(to right, #2563eb, #1e40af);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: bold;
+          animation: glow 1.5s infinite;
+        }
+
+        @keyframes glow {
+          0%, 100% {
+            text-shadow: 0 0 10px rgba(37, 99, 235, 0.8), 0 0 20px rgba(37, 99, 235, 0.6);
+          }
+          50% {
+            text-shadow: 0 0 20px rgba(37, 99, 235, 1), 0 0 30px rgba(37, 99, 235, 0.8);
+          }
+        }
+
+        /* Countdown Timer Styling */
+        #countdown {
+    background: linear-gradient(to bottom, #f0f9ff, #e0f2fe);
+    padding: 60px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin: 40px auto;
+    max-width: 800px;
+  }
+
+  #countdown h2 {
+    font-size: 2.5rem;
+    color: #1e40af;
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 20px;
+  }
+
+  #countdown-timer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+  }
+
+  #countdown-timer div {
+    text-align: center;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+
+  #countdown-timer div:hover {
+    transform: translateY(-5px);
+  }
+
+  #countdown-timer span {
+    display: block;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #2563eb;
+    font-family: 'Manrope', sans-serif;
+  }
+
+  #countdown-timer p {
+    margin-top: 5px;
+    font-size: 1rem;
+    color: #6b7280;
+  }
     </style>
 </head>
 <body class="bg-floral dark:bg-background-dark text-slate-800 font-display antialiased selection:bg-primary/30 selection:text-primary-dark overflow-x-hidden">
@@ -570,6 +664,57 @@ function toggleVideo() {
 </div>
 </div>
 </section>
+<!-- Added Countdown Section -->
+<section id="countdown" style="background: #f9fafb; padding: 60px 20px; text-align: center;">
+  <h2 style="font-size: 2.5rem; color: #2563eb; font-family: 'Playfair Display', serif; margin-bottom: 20px;">Đếm Ngược Đến Ngày Tốt Nghiệp</h2>
+  <div id="countdown-timer" style="display: flex; justify-content: center; gap: 20px; font-family: 'Manrope', sans-serif;">
+    <div style="text-align: center;">
+      <span id="days" style="font-size: 3rem; font-weight: bold; color: #1e40af;">00</span>
+      <p style="margin-top: 5px; color: #6b7280;">Ngày</p>
+    </div>
+    <div style="text-align: center;">
+      <span id="hours" style="font-size: 3rem; font-weight: bold; color: #1e40af;">00</span>
+      <p style="margin-top: 5px; color: #6b7280;">Giờ</p>
+    </div>
+    <div style="text-align: center;">
+      <span id="minutes" style="font-size: 3rem; font-weight: bold; color: #1e40af;">00</span>
+      <p style="margin-top: 5px; color: #6b7280;">Phút</p>
+    </div>
+    <div style="text-align: center;">
+      <span id="seconds" style="font-size: 3rem; font-weight: bold; color: #1e40af;">00</span>
+      <p style="margin-top: 5px; color: #6b7280;">Giây</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Countdown Timer Script
+  const graduationDate = new Date('2026-01-16T09:00:00');
+
+  function updateCountdown() {
+    const now = new Date();
+    const timeLeft = graduationDate - now;
+
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+    document.getElementById('days').textContent = days.toString().padStart(2, '0');
+    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+    if (timeLeft < 0) {
+      clearInterval(countdownInterval);
+      document.getElementById('countdown-timer').innerHTML = '<p style="font-size: 1.5rem; color: #6b7280;">Sự kiện đã bắt đầu!</p>';
+    }
+  }
+
+  const countdownInterval = setInterval(updateCountdown, 1000);
+  updateCountdown();
+</script>
+
 <canvas id="gradConfetti" class="fixed inset-0 pointer-events-none z-[60]"></canvas>
 <script>
 const canvas = document.getElementById('gradConfetti');

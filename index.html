@@ -134,15 +134,6 @@
           animation: glow 1.5s infinite;
         }
 
-        @keyframes glow {
-          0%, 100% {
-            text-shadow: 0 0 10px rgba(37, 99, 235, 0.8), 0 0 20px rgba(37, 99, 235, 0.6);
-          }
-          50% {
-            text-shadow: 0 0 20px rgba(37, 99, 235, 1), 0 0 30px rgba(37, 99, 235, 0.8);
-          }
-        }
-
         /* Countdown Timer Styling */
         #countdown {
     background: linear-gradient(to bottom, #f0f9ff, #e0f2fe);
@@ -193,6 +184,23 @@
     font-size: 1rem;
     color: #6b7280;
   }
+
+  /* Responsive Countdown Timer */
+  #countdown-timer {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  #countdown-timer div {
+    flex: 1 1 calc(50% - 10px); /* Two columns on smaller screens */
+    max-width: 150px;
+  }
+
+  @media (min-width: 768px) {
+    #countdown-timer div {
+      flex: 1 1 calc(25% - 10px); /* Four columns on larger screens */
+    }
+  }
     </style>
 </head>
 <body class="bg-floral dark:bg-background-dark text-slate-800 font-display antialiased selection:bg-primary/30 selection:text-primary-dark overflow-x-hidden">
@@ -219,98 +227,45 @@
   </span>
 </div>
 <script>
-    const bgMusic = document.getElementById('bgMusic');
-    const musicIcon = document.getElementById('musicIcon');
-    const tooltip = document.getElementById('musicTooltip');
+  // Restore autoplay functionality for background music
+  const bgMusic = document.getElementById('bgMusic');
+  const musicIcon = document.getElementById('musicIcon');
+  const tooltip = document.getElementById('musicTooltip');
 
-    let isPlaying = false;
-    let fadeInterval = null;
+  let isPlaying = false;
 
-    bgMusic.volume = 0;
-    function fadeInMusic(duration = 2500) {
-    clearInterval(fadeInterval);
-    bgMusic.play();
-    let step = 0.02;
-    fadeInterval = setInterval(() => {
-        if (bgMusic.volume < 0.35) {
-        bgMusic.volume = Math.min(bgMusic.volume + step, 0.35);
-        } else {
-        clearInterval(fadeInterval);
-        }
-    }, duration / (0.35 / step));
-    }
-    function fadeOutMusic(duration = 1500) {
-    clearInterval(fadeInterval);
-    let step = 0.02;
-    fadeInterval = setInterval(() => {
-        if (bgMusic.volume > 0) {
-        bgMusic.volume = Math.max(bgMusic.volume - step, 0);
-        } else {
-        bgMusic.pause();
-        clearInterval(fadeInterval);
-        }
-    }, duration / (0.35 / step));
-    }
-
-    window.addEventListener('load', () => {
+  window.addEventListener('load', () => {
     bgMusic.muted = true;
     bgMusic.play().then(() => {
-        bgMusic.muted = false;
-        fadeInMusic();
-        isPlaying = true;
-        musicIcon.textContent = 'pause';
-        tooltip.textContent = 'Tắt nhạc';
+      bgMusic.muted = false;
+      isPlaying = true;
+      musicIcon.textContent = 'pause';
+      tooltip.textContent = 'Tắt nhạc';
     }).catch(() => {
-        document.addEventListener('click', enableMusicOnce, { once: true });
+      document.addEventListener('click', enableMusicOnce, { once: true });
     });
-    });
+  });
 
-    function enableMusicOnce() {
+  function enableMusicOnce() {
     bgMusic.muted = false;
-    fadeInMusic();
+    bgMusic.play();
     isPlaying = true;
     musicIcon.textContent = 'pause';
     tooltip.textContent = 'Tắt nhạc';
-    }
+  }
 
-    function toggleMusic() {
+  function toggleMusic() {
     if (isPlaying) {
-        fadeOutMusic();
-        musicIcon.textContent = 'music_note';
-        tooltip.textContent = 'Bật nhạc';
+      bgMusic.pause();
+      musicIcon.textContent = 'music_note';
+      tooltip.textContent = 'Bật nhạc';
     } else {
-        fadeInMusic();
-        musicIcon.textContent = 'pause';
-        tooltip.textContent = 'Tắt nhạc';
+      bgMusic.play();
+      musicIcon.textContent = 'pause';
+      tooltip.textContent = 'Tắt nhạc';
     }
     isPlaying = !isPlaying;
-    }
-    const gradVideo = document.getElementById('gradVideo');
-
-    if (gradVideo) {
-    gradVideo.addEventListener('pause', () => {
-        if (isPlaying) toggleMusic();
-    });
-
-    gradVideo.addEventListener('play', () => {
-        if (!isPlaying) toggleMusic();
-    });
-    }
-</script>
-<script>
-    function toggleMusic() {
-        const music = document.getElementById('bgMusic');
-        const icon = document.getElementById('musicIcon');
-        if (music.paused) {
-            music.play();
-            icon.innerText = 'pause';
-            icon.parentElement.classList.add('animate-spin-slow');
-        } else {
-            music.pause();
-            icon.innerText = 'music_note';
-            icon.parentElement.classList.remove('animate-spin-slow');
-        }
-    }
+  }
 </script>
 <nav class="sticky top-0 z-50 w-full border-b border-blue-100 bg-white/80 backdrop-blur-md dark:bg-background-dark/80 dark:border-gray-800 transition-all duration-300">
 <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -568,7 +523,7 @@
 </div>
 </div>
 </section>
-<section class="py-20 bg-blue-50 relative overflow-hidden" id="moments">
+<section class="py-10 bg-blue-50 relative overflow-hidden" id="moments">
 <div class="absolute top-0 right-0 w-64 h-64 bg-white/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
 <div class="mx-auto max-w-4xl text-center mb-12">
@@ -627,7 +582,7 @@ function toggleVideo() {
 </div>
 </div>
 </section>
-<section class="py-20 lg:py-32" id="rsvp">
+<section class="py-20" id="rsvp">
 <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
 <div class="group rounded-[2.5rem] bg-gradient-to-br from-blue-500 to-blue-700 px-6 py-12 shadow-2xl shadow-blue-400/40 md:px-12 md:py-16 relative overflow-hidden transition-transform hover:-translate-y-2 duration-500">
 <div class="absolute top-0 right-0 -mt-10 -mr-10 h-64 w-64 rounded-full bg-white opacity-10 blur-3xl animate-pulse-slow"></div>
